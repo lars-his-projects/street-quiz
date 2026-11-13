@@ -20,14 +20,27 @@ The map and the streets come from OpenStreetMap. The app uses no paid service an
 with a cost or a key needs a decision ticket. Obey the usage policy of each free service: keep the data on the device,
 and send no request to a map or data service from CI or from a cloud session. Tests use stored data.
 
-## P4. Phone first, no account
+## P4. Phone first, no account, for everyone
 
 The app works on a phone with one hand. The progress stays on the device. The app has no login and no server of its own.
+Each person can open the app and use it for an area in each country (owner, 2026-11-13). The pages follow the
+accessibility rules of the design standard of the fleet.
 
 ## P5. The user can see how streets are selected
 
 A formula with values from OpenStreetMap decides which streets are large. The app shows these values, and the user can
 remove a street from a selection.
+
+## P6. Fun first
+
+The quiz feels like a game: it is fast, it has a score and a streak, and a good moment gets a small reward on the
+screen (owner, 2026-11-13). The fun comes from the pace and the feedback, not from trivia (P1). A feature that makes
+the quiz slow or heavy needs a strong reason.
+
+## P7. Start simple, then add ways
+
+The first way to select streets is the name of an area, and the first way to answer is to type the name (owner,
+2026-11-13). More ways to select an area, the levels and more ways to answer come later, in the sequence of the roadmap.
 
 ## Owner involvement
 

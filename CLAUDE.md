@@ -38,6 +38,9 @@ map up to date.
   name. It never asks about history or facts (`steering/project/PRINCIPLES.md`).
 - **P3, open data and free services:** no code sends a request to a map or data service from CI or from a cloud
   session. Tests use stored data. Keep the data on the device.
+- **P6, fun first:** the quiz is fast and feels like a game. A feature that makes it slow or heavy needs a strong reason.
+- **P7, start simple:** the first selection is the name of an area, and the first answer is a typed name. Other ways
+  come in the sequence of the roadmap.
 
 @framework/CLAUDE.md
 @docs/LEARNINGS.md
