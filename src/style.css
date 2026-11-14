@@ -5,3 +5,60 @@ body,
   width: 100%;
   height: 100%;
 }
+
+#quiz {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+  font-family: system-ui, sans-serif;
+  transition: background 0.15s;
+}
+
+#quiz .row {
+  display: flex;
+  gap: 8px;
+}
+
+#quiz input {
+  flex: 1;
+  min-width: 0;
+  font-size: 18px;
+  padding: 12px;
+  border: 2px solid #888;
+  border-radius: 8px;
+}
+
+#quiz button {
+  font-size: 18px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 8px;
+  background: #e6007e;
+  color: #fff;
+}
+
+#feedback {
+  min-height: 1.4em;
+  margin-bottom: 6px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#quiz.right {
+  background: #b7f0c0;
+}
+
+#quiz.wrong {
+  background: #f6b8b8;
+}
+
+/* Keep the map attribution above the answer form. */
+.maplibregl-ctrl-bottom-right,
+.maplibregl-ctrl-bottom-left {
+  bottom: 120px;
+}
