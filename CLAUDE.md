@@ -29,6 +29,8 @@ map up to date.
 - `index.html`, `src/main.ts` – the page and its entry point. `vite.config.ts` sets `base: "/street-quiz/"`: the app is
   served from https://lars-his-projects.github.io/street-quiz/.
 - `src/` – the logic and the map code. `src/normalize.ts` compares street names (lower case, no accents, trimmed).
+  `src/quiz.ts` is the logic of a round (no map code); `src/main.ts` draws the marked street and the answer form.
+- `public/areas/<slug>.geojson` – the stored streets of an area, made by `scripts/fetch_area.py` (the owner runs it).
 - `tests/` – Vitest tests (`*.test.ts`) and pytest tests of the agent tools. A pytest file name must not repeat a name in `framework/tests/`.
 - `framework/`, `.claude/`, `steering/` – the agent system.
 
