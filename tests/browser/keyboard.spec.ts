@@ -48,7 +48,8 @@ test("the street stays in view when the visible height becomes smaller", async (
     await page.locator("#answer").fill("No Such Street");
     await page.locator("#answer").press("Enter");
     await expect(page.locator("#feedback")).not.toHaveText("");
-    await expect(page.locator("#feedback")).toHaveText("", { timeout: 5_000 });
+    await page.locator("#answer").press("Enter");
+    await expect(page.locator("#feedback")).toHaveText("");
     await page.waitForTimeout(500);
   }
   await expectInView(page);
