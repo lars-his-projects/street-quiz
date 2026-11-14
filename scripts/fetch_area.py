@@ -29,8 +29,9 @@ from pathlib import Path
 # session (2026-11-14): then the next server gets the same request.
 OVERPASS_URLS = (
     "https://overpass-api.de/api/interpreter",
-    "https://overpass.openstreetmap.fr/api/interpreter",
-)
+    "https://overpass.private.coffee/api/interpreter",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+)  # not overpass.openstreetmap.fr: it refuses each user that is not on its white list (#52)
 AREA_OFFSET = 3600000000  # Overpass area id = relation id + this offset
 NO_PUBLIC = frozenset({"private", "no"})  # values of `access`: the public cannot use the way
 NOT_A_STREET = frozenset({"platform", "corridor", "elevator", "construction", "proposed"})  # values of `highway`
