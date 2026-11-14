@@ -17,7 +17,7 @@ voice, imperative).
 | Fast tests | `python3 -m pytest -q && npx vitest run` (one file: `npx vitest run tests/a.test.ts`) |
 | Build | `npm run build` (checks the types, then makes `dist/`) |
 | Development server | `npm run dev` |
-| Slow tests | None yet: the first feature that needs a browser test adds Playwright |
+| Browser tests | `npx playwright test` (builds the app; a cloud session has the browser, do not run `playwright install`) |
 
 Put scratch output in the scratchpad or in `out/`. Never commit `dist/` or `node_modules/`.
 

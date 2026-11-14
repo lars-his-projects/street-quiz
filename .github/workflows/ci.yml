@@ -31,3 +31,18 @@ jobs:
         run: python3 -m pytest -q && npx vitest run
       - name: Build
         run: npm run build
+
+  # The browser test (#14): the built app at a phone and a computer size, with no request to an outside host (P3).
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Browser tests
+        run: npx playwright test
