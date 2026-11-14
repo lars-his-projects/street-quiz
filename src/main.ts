@@ -1,16 +1,79 @@
 import "./style.css";
 import type { GeoJSONSource, LngLatBoundsLike } from "maplibre-gl";
+import { streetsOfArea } from "./area";
 import { createForm, showResult } from "./form";
+import { type AreaResult, findAreas } from "./geocode";
 import { addStreetLayer, createMap, FIT_OPTIONS, streetData } from "./map";
-import { bounds, check, nextStreet, streetsFromGeoJson } from "./quiz";
+import { bounds, check, nextStreet, type Street, streetsFromGeoJson } from "./quiz";
+import { createStartForm, showAreas, showStatus } from "./start";
 import { token } from "./theme";
 
-/** The stored area: the Jordaan in Amsterdam (`scripts/fetch_area.py 12011952 jordaan`, #8). */
-const AREA = "jordaan";
+/**
+ * A stored area of `public/areas/`: `?area=jordaan` starts the quiz with it at once (the browser tests, #32).
+ * The Jordaan in Amsterdam: `scripts/fetch_area.py 12011952 jordaan` (#8).
+ */
+const STORED = new Set(["jordaan"]);
 
+/** The first screen: the user types the name of an area, selects it, and the quiz starts with its streets (#32). */
 async function start(): Promise<void> {
   const app = document.querySelector<HTMLElement>("#app");
   if (!app) return;
+  const slug = new URLSearchParams(window.location.search).get("area") ?? "";
+  if (STORED.has(slug)) {
+    const response = await fetch(`${import.meta.env.BASE_URL}areas/${slug}.geojson`);
+    return play(app, streetsFromGeoJson(await response.json()));
+  }
+  const startForm = createStartForm();
+  const { form, input } = startForm;
+  form.id = "start";
+  document.body.append(form);
+  let busy = false;
+
+  const pick = async (area: AreaResult) => {
+    if (busy) return;
+    busy = true;
+    showAreas(startForm, [], pick);
+    showStatus(startForm, "wait", `Loading the streets of ${area.name}…`);
+    try {
+      const streets = streetsFromGeoJson(await streetsOfArea(area.relation));
+      if (streets.length === 0) {
+        showStatus(startForm, "error", `${area.name} has no street for the quiz. Try another area.`);
+      } else {
+        form.remove();
+        return play(app, streets);
+      }
+    } catch {
+      showStatus(startForm, "error", "The street service did not answer. Try again.");
+      showAreas(startForm, [area], pick);
+    } finally {
+      busy = false;
+    }
+  };
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (busy || input.value.trim() === "") return;
+    busy = true;
+    showAreas(startForm, [], pick);
+    showStatus(startForm, "wait", "Searching…");
+    let areas: AreaResult[] = [];
+    try {
+      areas = await findAreas(input.value);
+    } catch {
+      busy = false;
+      return showStatus(startForm, "error", "The search service did not answer. Try again.");
+    }
+    busy = false;
+    if (areas.length === 0) return showStatus(startForm, "error", "No area has this name. Try another name.");
+    if (areas.length === 1) return pick(areas[0]);
+    showStatus(startForm, "", "Select the area:");
+    showAreas(startForm, areas, pick);
+  });
+  input.focus();
+}
+
+/** Play the quiz with the streets of an area. */
+function play(app: HTMLElement, streets: Street[]): void {
   const quiz = createForm();
   const { form, input } = quiz;
   // The ids are for the browser test (`tests/browser/round.spec.ts`); the CSS uses the classes.
@@ -18,8 +81,6 @@ async function start(): Promise<void> {
   input.id = "answer";
   quiz.feedback.id = "feedback";
   document.body.append(form);
-  const response = await fetch(`${import.meta.env.BASE_URL}areas/${AREA}.geojson`);
-  const streets = streetsFromGeoJson(await response.json());
   let street = nextStreet(streets);
   // The map starts at the first street: it asks for no tile of another place, and it makes no move (#16).
   const map = createMap(app, bounds(street) as LngLatBoundsLike);

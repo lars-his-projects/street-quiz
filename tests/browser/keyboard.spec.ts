@@ -40,7 +40,7 @@ test("the street stays in view when the visible height becomes smaller", async (
         ? route.fulfill({ json: STYLE })
         : route.abort(),
   );
-  await page.goto("./");
+  await page.goto("./?area=jordaan");
   // A tall street does not fit into the small map with no new fit: skip the short streets with a wrong answer.
   for (let round = 0; round < 30; round++) {
     const [, top, , bottom] = await streetBox(page);
