@@ -1,3 +1,4 @@
+import { streetKind } from "./kind";
 import { normalizeStreetName } from "./normalize";
 
 /** One street of an area: a name and all its parts as lines of [lon, lat]. */
@@ -25,19 +26,33 @@ export function nextStreet(streets: Street[], last?: Street, random: () => numbe
   return choices[Math.floor(random() * choices.length)];
 }
 
-/** Give up to four different names (by `normalize`): the name of the street and three other names, in random order. */
+/** Put the streets of the same kind as `street` first (#57), and keep the order of each part. */
+function sameKindFirst(streets: Street[], street: Street): Street[] {
+  const kind = streetKind(street.name);
+  const same = streets.filter((s) => streetKind(s.name) === kind);
+  return [...same, ...streets.filter((s) => streetKind(s.name) !== kind)];
+}
+
+/**
+ * Give up to four different names (by `normalize`): the name of the street and three other names, in random order.
+ * The other names have the kind of the street (a street, a square, ...) when the area has enough of them (#57).
+ */
 export function choices(streets: Street[], street: Street, random: () => number = Math.random): string[] {
+  const kind = streetKind(street.name);
   const seen = new Set([normalizeStreetName(street.name)]);
-  const others: string[] = [];
+  const same: string[] = [];
+  const rest: string[] = [];
   for (const s of streets) {
     const key = normalizeStreetName(s.name);
     if (seen.has(key)) continue;
     seen.add(key);
-    others.push(s.name);
+    (streetKind(s.name) === kind ? same : rest).push(s.name);
   }
   const names = [street.name];
-  while (names.length < 4 && others.length > 0) {
-    names.push(others.splice(Math.floor(random() * others.length), 1)[0]);
+  for (const others of [same, rest]) {
+    while (names.length < 4 && others.length > 0) {
+      names.push(others.splice(Math.floor(random() * others.length), 1)[0]);
+    }
   }
   // Fisher-Yates shuffle: the position of the correct name is random.
   for (let i = names.length - 1; i > 0; i--) {
@@ -53,7 +68,10 @@ function center(street: Street): [number, number] {
   return [(w + e) / 2, (s + n) / 2];
 }
 
-/** Give up to four different names (by `normalize`): the name of the street and the three names with the nearest centers, in random order. */
+/**
+ * Give up to four different names (by `normalize`): the name of the street and the three names with the nearest
+ * centers, in random order. Names of the same kind as the street come first (#57).
+ */
 export function nearChoices(streets: Street[], street: Street, random: () => number = Math.random): string[] {
   const [cx, cy] = center(street);
   const distance = (s: Street) => {
@@ -62,7 +80,10 @@ export function nearChoices(streets: Street[], street: Street, random: () => num
   };
   const seen = new Set([normalizeStreetName(street.name)]);
   const names = [street.name];
-  for (const s of [...streets].sort((a, b) => distance(a) - distance(b))) {
+  for (const s of sameKindFirst(
+    [...streets].sort((a, b) => distance(a) - distance(b)),
+    street,
+  )) {
     if (names.length >= 4) break;
     const key = normalizeStreetName(s.name);
     if (seen.has(key)) continue;
