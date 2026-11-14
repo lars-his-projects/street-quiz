@@ -69,7 +69,11 @@ test.describe("at a phone size", () => {
     await page.locator("#answer").fill("No Such Street");
     await page.locator("#answer").press("Enter");
     await expect(page.locator("#feedback")).toHaveText(first.name);
-    await expect(page.locator("#feedback")).toHaveText("", { timeout: 5_000 });
+    // The result stays until the user goes on (#23).
+    await page.waitForTimeout(2_500);
+    await expect(page.locator("#feedback")).toHaveText(first.name);
+    await page.locator("#answer").press("Enter");
+    await expect(page.locator("#feedback")).toHaveText("");
     const second = await shown();
     expect(second).not.toBe(first);
 

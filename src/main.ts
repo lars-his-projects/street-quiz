@@ -7,8 +7,6 @@ import { token } from "./theme";
 
 /** The stored area: the Jordaan in Amsterdam (`scripts/fetch_area.py 12011952 jordaan`, #8). */
 const AREA = "jordaan";
-const FLASH_MS = 700;
-const WRONG_MS = 1800;
 
 async function start(): Promise<void> {
   const app = document.querySelector<HTMLElement>("#app");
@@ -24,7 +22,9 @@ async function start(): Promise<void> {
   const response = await fetch(`${import.meta.env.BASE_URL}areas/${AREA}.geojson`);
   const streets = streetsFromGeoJson(await response.json());
   let street = nextStreet(streets);
-  let busy = false;
+  // After an answer, the result stays on screen until the user goes on (#23): the button then says "Next".
+  let answered = false;
+  const button = form.querySelector<HTMLButtonElement>("button");
 
   const fitStreet = (duration: number) =>
     map.fitBounds(bounds(street) as LngLatBoundsLike, { padding: 80, maxZoom: 17, duration });
@@ -71,23 +71,26 @@ async function start(): Promise<void> {
     app.dataset.box = [a.x, a.y, b.x, b.y].map(Math.round).join(" ");
   });
 
+  const goNext = () => {
+    showResult(quiz, "", "");
+    input.value = "";
+    input.readOnly = false;
+    if (button) button.textContent = "OK";
+    street = nextStreet(streets, street);
+    show();
+    answered = false;
+    input.focus();
+  };
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    if (busy || input.value.trim() === "") return;
-    busy = true;
+    if (answered) return goNext();
+    if (input.value.trim() === "") return;
+    answered = true;
     const right = check(input.value, street);
     showResult(quiz, right ? "right" : "wrong", right ? "Right!" : street.name);
-    setTimeout(
-      () => {
-        showResult(quiz, "", "");
-        input.value = "";
-        street = nextStreet(streets, street);
-        show();
-        busy = false;
-        input.focus();
-      },
-      right ? FLASH_MS : WRONG_MS,
-    );
+    // Read only keeps the phone keyboard open, and Enter still goes on.
+    input.readOnly = true;
+    if (button) button.textContent = "Next";
   });
   input.focus();
 }
