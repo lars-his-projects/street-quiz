@@ -1,16 +1,23 @@
 html,
-body,
-#app {
+body {
   margin: 0;
-  width: 100%;
   height: 100%;
 }
 
+/* A column: the map takes the space above the answer form. No part of the map, and no map control, is below the form. */
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+#app {
+  flex: 1;
+  min-height: 0;
+}
+
 #quiz {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
   padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
@@ -55,10 +62,4 @@ body,
 
 #quiz.wrong {
   background: #f6b8b8;
-}
-
-/* Keep the map attribution above the answer form. */
-.maplibregl-ctrl-bottom-right,
-.maplibregl-ctrl-bottom-left {
-  bottom: 120px;
 }
