@@ -31,6 +31,9 @@ map up to date.
 - `src/` – the logic and the map code. `src/normalize.ts` compares street names (lower case, no accents, ß as ss, trimmed).
   `src/quiz.ts` is the logic of a round (no map code); `src/main.ts` draws the marked street and the answer form.
   `src/map.ts` makes the map and gives MapLibre the address of its worker file (`tests/build_worker.test.ts`).
+- The design system (#17): `src/style.css` has the tokens (CSS variables) and the themes; a rule uses only tokens
+  (`tests/theme_tokens.test.ts`). `src/form.ts` makes the answer form, `src/theme.ts` sets the theme (`?theme=b`).
+  `style.html` (`src/style-page.ts`) shows each component in each state with the same CSS and markup as the app.
 - `public/areas/<slug>.geojson` – the stored streets of an area, made by `scripts/fetch_area.py` (an agent runs it).
   The top of the script says what a street of the quiz is. The app asks the area `AREA` of `src/main.ts`: the Jordaan.
 - `tests/` – Vitest tests (`*.test.ts`) and pytest tests of the agent tools. A pytest file name must not repeat a name in `framework/tests/`.
