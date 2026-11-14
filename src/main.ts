@@ -1,10 +1,10 @@
 import "./style.css";
 import type { GeoJSONSource, LngLatBoundsLike } from "maplibre-gl";
 import { streetsOfArea } from "./area";
-import { createForm, showResult } from "./form";
+import { createForm, markOptions, selectedMode, showMode, showResult } from "./form";
 import { type AreaResult, findAreas } from "./geocode";
 import { addStreetLayer, createMap, FIT_OPTIONS, streetData } from "./map";
-import { bounds, check, nextStreet, type Street, streetsFromGeoJson } from "./quiz";
+import { bounds, check, choices, nearChoices, nextStreet, type Street, streetsFromGeoJson } from "./quiz";
 import { createStartForm, showAreas, showStatus } from "./start";
 import { token } from "./theme";
 
@@ -93,7 +93,21 @@ function play(app: HTMLElement, streets: Street[]): void {
   const fitStreet = (duration: number) =>
     map.fitBounds(bounds(street) as LngLatBoundsLike, { ...FIT_OPTIONS, duration });
   let first = true;
+  // The mode of the switch (#39): a change applies to the next street.
+  const tap = (name: string) => {
+    if (answered) return goNext();
+    answered = true;
+    const right = check(name, street);
+    markOptions(quiz, name, street.name);
+    showResult(quiz, right ? "right" : "wrong", right ? "Right!" : street.name);
+  };
+  const showOptions = () => {
+    const mode = selectedMode(quiz);
+    const names = mode === "easy" ? choices(streets, street) : mode === "hard" ? nearChoices(streets, street) : [];
+    showMode(quiz, mode, names, tap);
+  };
   const show = () => {
+    showOptions();
     map.getSource<GeoJSONSource>("street")?.setData(streetData(street.lines));
     app.dataset.street = String(streets.indexOf(street));
     delete app.dataset.drawn;
@@ -145,8 +159,13 @@ function play(app: HTMLElement, streets: Street[]): void {
     street = nextStreet(streets, street);
     show();
     answered = false;
-    input.focus();
+    if (selectedMode(quiz) === "type") input.focus();
   };
+  form.addEventListener("change", (event) => {
+    if ((event.target as HTMLInputElement).name !== "mode" || answered) return;
+    showOptions();
+    if (selectedMode(quiz) === "type") input.focus();
+  });
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     if (answered) return goNext();

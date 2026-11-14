@@ -206,3 +206,71 @@ body.app:has(.start) #app {
   padding: 0;
   list-style: none;
 }
+
+/* The mode switch and the option buttons (#39). In "easy" and "hard" the option buttons replace the typed answer. */
+.quiz .modes {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
+}
+
+.quiz .modes label {
+  display: flex;
+  align-items: center;
+  min-height: var(--target);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: var(--font-size);
+}
+
+.quiz .modes label:has(:checked) {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: var(--font-weight-feedback);
+}
+
+.quiz .modes input {
+  position: absolute;
+  opacity: 0;
+}
+
+.quiz .options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.quiz:not([data-mode="type"]) .row {
+  display: none;
+}
+
+.quiz .options .option {
+  min-height: var(--target);
+  padding: var(--space-2);
+  border: var(--border-width) solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: normal;
+}
+
+.quiz .options .option.correct {
+  background: var(--color-right);
+  color: var(--color-on-right);
+  font-weight: var(--font-weight-feedback);
+}
+
+.quiz .options .option.wrong {
+  background: var(--color-wrong);
+  color: var(--color-on-wrong);
+  text-decoration: line-through;
+}
+
+.quiz .options .option.correct::before {
+  content: "✓ ";
+}
+
+.quiz .options .option.wrong::before {
+  content: "✗ ";
+}
