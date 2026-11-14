@@ -31,6 +31,7 @@ map up to date.
 - `src/` – the logic and the map code. `src/normalize.ts` compares street names (lower case, no accents, ß as ss, trimmed).
   `src/quiz.ts` is the logic of a round (no map code); `src/main.ts` draws the marked street and the answer form, follows the visual viewport (phone keyboard) and sets marks on `#app` for `tests/browser/`.
   `src/map.ts` makes the map and gives MapLibre the address of its worker file (`tests/build_worker.test.ts`).
+- `src/store.ts` – keeps the GeoJSON of an area on the device (IndexedDB, key: OSM relation id): `saveArea`, `loadArea`.
 - The design system (#17): `src/style.css` has the tokens (CSS variables) of the look "candy" (#21); a rule uses only
   tokens (`tests/theme_tokens.test.ts`). `src/form.ts` makes the answer form, `src/theme.ts` reads a token.
   `style.html` (`src/style-page.ts`) shows each component in each state with the same CSS and markup as the app.
