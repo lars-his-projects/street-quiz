@@ -18,7 +18,7 @@ export interface StreetCollection {
   type: "FeatureCollection";
   features: {
     type: "Feature";
-    properties: { name: string };
+    properties: { name: string; length: number; highway: string; lanes: number };
     geometry: { type: "MultiLineString"; coordinates: Line[] };
   }[];
 }
@@ -34,6 +34,16 @@ function lineLength(line: Line): number {
     total += EARTH_RADIUS * Math.hypot(east, rad(lat2 - lat1));
   }
   return total;
+}
+
+/** Return the value of a `lanes` tag, or null when it is missing or not a whole number. */
+function lanesValue(text: string | undefined): number | null {
+  return text !== undefined && /^\s*\d{1,3}\s*$/.test(text) ? Number.parseInt(text, 10) : null;
+}
+
+/** Return the `highway` class with the largest length (the first in the alphabet when equal). */
+function mainClass(lengths: Map<string, number>): string {
+  return [...lengths.entries()].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))[0][0];
 }
 
 function isStreetWay(element: OverpassElement): boolean {
@@ -52,6 +62,8 @@ export function overpassToStreets(answer: { elements?: OverpassElement[] }): Str
   const linesByName = new Map<string, Line[]>();
   const lengthByName = new Map<string, number>();
   const bridgeByName = new Map<string, number>();
+  const classesByName = new Map<string, Map<string, number>>();
+  const lanesByName = new Map<string, number>();
   for (const element of answer.elements ?? []) {
     if (!isStreetWay(element)) continue;
     const tags = element.tags as Record<string, string | undefined>;
@@ -60,6 +72,12 @@ export function overpassToStreets(answer: { elements?: OverpassElement[] }): Str
     const length = lineLength(line);
     linesByName.set(name, [...(linesByName.get(name) ?? []), line]);
     lengthByName.set(name, (lengthByName.get(name) ?? 0) + length);
+    const classes = classesByName.get(name) ?? new Map<string, number>();
+    const highway = tags.highway ?? "";
+    classes.set(highway, (classes.get(highway) ?? 0) + length);
+    classesByName.set(name, classes);
+    const lanes = lanesValue(tags.lanes);
+    if (lanes !== null) lanesByName.set(name, Math.max(lanesByName.get(name) ?? lanes, lanes));
     if ((tags.bridge ?? "no") !== "no") bridgeByName.set(name, (bridgeByName.get(name) ?? 0) + length);
   }
   const features = [...linesByName.keys()]
@@ -70,7 +88,12 @@ export function overpassToStreets(answer: { elements?: OverpassElement[] }): Str
     })
     .map((name) => ({
       type: "Feature" as const,
-      properties: { name },
+      properties: {
+        name,
+        length: Math.floor((lengthByName.get(name) ?? 0) + 0.5),
+        highway: mainClass(classesByName.get(name) as Map<string, number>),
+        lanes: lanesByName.get(name) ?? 1,
+      },
       geometry: { type: "MultiLineString" as const, coordinates: linesByName.get(name) as Line[] },
     }));
   return { type: "FeatureCollection", features };
