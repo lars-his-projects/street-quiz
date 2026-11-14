@@ -1,0 +1,29 @@
+{
+  "version": 0.6,
+  "elements": [
+    {
+      "type": "way",
+      "id": 1,
+      "tags": { "highway": "residential", "name": "Hauptstraße" },
+      "geometry": [{ "lat": 52.0, "lon": 13.0 }, { "lat": 52.001, "lon": 13.001 }]
+    },
+    {
+      "type": "way",
+      "id": 2,
+      "tags": { "highway": "residential", "name": "Hauptstraße" },
+      "geometry": [{ "lat": 52.001, "lon": 13.001 }, { "lat": 52.002, "lon": 13.003 }]
+    },
+    {
+      "type": "way",
+      "id": 3,
+      "tags": { "highway": "tertiary", "name": "Ackerweg" },
+      "geometry": [{ "lat": 52.01, "lon": 13.01 }, { "lat": 52.011, "lon": 13.012 }]
+    },
+    {
+      "type": "way",
+      "id": 4,
+      "tags": { "highway": "service" },
+      "geometry": [{ "lat": 52.02, "lon": 13.02 }, { "lat": 52.021, "lon": 13.021 }]
+    }
+  ]
+}
