@@ -20,8 +20,9 @@ The map and the streets come from OpenStreetMap. The app uses no paid service an
 with a cost or a key needs a decision ticket. Obey the usage policy of each free service, and keep the data on the
 device. Tests and CI use stored data: they send no request to a map or data service. An agent can get data from an
 OpenStreetMap service on purpose, to make the stored data of an area or of a test (owner, 2026-11-14): few and small
-requests, one at a time, with the name of the project in the User-Agent. A step that a machine can do is not a
-step for the owner.
+requests, one at a time, with the name of the project in the User-Agent. For a look at a page, an agent loads the
+real map in a browser, as a user does: one load for each image. A page check with no map does not show that the
+map works. A step that a machine can do is not a step for the owner.
 
 ## P4. Phone first, no account, for everyone
 
