@@ -45,3 +45,34 @@ export function addStreetLayer(map: MapLibreMap, lines: [number, number][][], co
     paint: { "line-color": color, "line-width": 9, "line-opacity": 0.9 },
   });
 }
+
+/** The data of the other option streets (#58): each feature has `other` (1, 2 or 3) for its color. */
+export function otherData(streets: { lines: [number, number][][] }[]) {
+  return {
+    type: "FeatureCollection" as const,
+    features: streets.map((street, i) => ({
+      type: "Feature" as const,
+      properties: { other: i + 1 },
+      geometry: { type: "MultiLineString" as const, coordinates: street.lines },
+    })),
+  };
+}
+
+/** Add the layer of the other option streets below the marked street. `colors` are the colors of `other` 1, 2 and 3. */
+export function addOtherLayer(map: MapLibreMap, colors: [string, string, string]): void {
+  map.addSource("others", { type: "geojson", data: otherData([]) });
+  map.addLayer(
+    {
+      id: "others",
+      type: "line",
+      source: "others",
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: {
+        "line-color": ["match", ["get", "other"], 1, colors[0], 2, colors[1], colors[2]],
+        "line-width": 6,
+        "line-opacity": 0.9,
+      },
+    },
+    "street",
+  );
+}

@@ -52,13 +52,24 @@ export function showMode(quiz: QuizForm, mode: Mode, names: string[], tap: (name
   );
 }
 
-/** Mark the option buttons after a tap: the tapped name is right or wrong, and the correct name gets a mark. */
-export function markOptions(quiz: QuizForm, tapped: string, correct: string): void {
+/**
+ * Mark the option buttons after a tap: the tapped name is right or wrong, and the correct name gets a mark.
+ * Each other option gets `data-other` 1, 2 or 3: its color dot has the color of its street on the map (#58).
+ * Return the other names in the sequence of their `data-other` number.
+ */
+export function markOptions(quiz: QuizForm, tapped: string, correct: string): string[] {
+  const others: string[] = [];
   for (const button of quiz.options.querySelectorAll<HTMLButtonElement>("button")) {
-    const name = button.textContent;
+    const name = button.textContent ?? "";
     button.classList.toggle("correct", name === correct);
     button.classList.toggle("wrong", name === tapped && name !== correct);
+    if (name === correct) delete button.dataset.other;
+    else {
+      others.push(name);
+      button.dataset.other = String(others.length);
+    }
   }
+  return others;
 }
 
 /** Show a result on the form: "right", "wrong" or none. */

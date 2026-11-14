@@ -14,6 +14,10 @@
   --color-wrong: #ffb3a7;
   --color-on-wrong: #4a0a00;
   --color-street: #0077ff;
+  --color-other-1: #c2185b;
+  --color-other-2: #2e7d32;
+  --color-other-3: #6a1b9a;
+  --dot: 12px;
   --color-shadow: #8a6d3b44;
   --font-body: ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif;
   --font-size: 18px;
@@ -275,4 +279,29 @@ body.app:has(.start) #app {
 
 .quiz .options .option.wrong::before {
   content: "✗ ";
+}
+
+/* After an answer, each option has a dot in the color of its street on the map (#58): blue for the correct street. */
+.quiz .options .option.correct::after,
+.quiz .options .option[data-other]::after {
+  content: "";
+  display: inline-block;
+  width: var(--dot);
+  height: var(--dot);
+  margin-left: var(--space-1);
+  border-radius: var(--radius);
+  background: var(--color-street);
+  vertical-align: middle;
+}
+
+.quiz .options .option[data-other="1"]::after {
+  background: var(--color-other-1);
+}
+
+.quiz .options .option[data-other="2"]::after {
+  background: var(--color-other-2);
+}
+
+.quiz .options .option[data-other="3"]::after {
+  background: var(--color-other-3);
 }
