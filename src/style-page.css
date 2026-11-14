@@ -23,21 +23,6 @@ body.style-page {
   font-size: 20px;
 }
 
-.style-page nav button {
-  min-width: var(--target);
-  min-height: var(--target);
-  font: inherit;
-  font-weight: 700;
-  border: 2px solid #111111;
-  border-radius: 8px;
-  background: #ffffff;
-}
-
-.style-page nav button[aria-pressed="true"] {
-  background: #111111;
-  color: #ffffff;
-}
-
 .style-page main {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));

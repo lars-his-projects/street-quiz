@@ -4,9 +4,9 @@ import type { LngLatBoundsLike } from "maplibre-gl";
 import { createForm, type QuizForm, showResult } from "./form";
 import { addStreetLayer, createMap } from "./map";
 import { bounds, streetsFromGeoJson } from "./quiz";
-import { applyTheme, setTheme, THEMES, type Theme, token } from "./theme";
+import { token } from "./theme";
 
-/** The style page (#17): each component of the app in each state, in the theme of the switch. */
+/** The style page (#17): each component of the app in each state. */
 const AREA = "jordaan";
 
 function section(title: string, body: HTMLElement): HTMLElement {
@@ -26,9 +26,7 @@ function formIn(state: (quiz: QuizForm) => void): HTMLElement {
 
 async function start(): Promise<void> {
   const main = document.querySelector<HTMLElement>("#components");
-  const nav = document.querySelector<HTMLElement>("#themes");
-  if (!main || !nav) return;
-  let theme = applyTheme(location.search);
+  if (!main) return;
 
   const mapBox = document.createElement("div");
   mapBox.className = "map";
@@ -68,23 +66,6 @@ async function start(): Promise<void> {
     addStreetLayer(map, street.lines, token("--color-street"));
     map.fitBounds(bounds(street) as LngLatBoundsLike, { padding: 40, maxZoom: 17, duration: 0 });
   });
-
-  const buttons = THEMES.map((name) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = name.toUpperCase();
-    button.addEventListener("click", () => select(name));
-    return button;
-  });
-  nav.append(...buttons);
-  const select = (next: Theme) => {
-    theme = next;
-    setTheme(theme);
-    for (const [i, button] of buttons.entries()) button.setAttribute("aria-pressed", String(THEMES[i] === theme));
-    if (map.getLayer("street")) map.setPaintProperty("street", "line-color", token("--color-street"));
-    history.replaceState(null, "", theme === "a" ? location.pathname : `?theme=${theme}`);
-  };
-  select(theme);
 }
 
 start();

@@ -1,53 +1,9 @@
 /*
- * The design system of street-quiz (#17). Each rule of the app uses only these tokens. A theme is one set of token
- * values: A is the default, B and C are other directions for the owner. `style.html` shows each component in each
- * theme. `tests/theme_tokens.test.ts` checks the contrast and the size of the touch targets of each theme.
+ * The design system of street-quiz (#17). Each rule of the app uses only these tokens. The look is "candy": a warm
+ * light panel, round pill shapes, an orange button and a blue street (the owner selected it, #21). `style.html` shows
+ * each component in each state. `tests/theme_tokens.test.ts` checks the contrast and the size of the touch targets.
  */
 :root {
-  --color-surface: #ffffff;
-  --color-text: #111111;
-  --color-border: #767676;
-  --color-accent: #e6007e;
-  --color-on-accent: #ffffff;
-  --color-right: #b7f0c0;
-  --color-on-right: #0b3d17;
-  --color-wrong: #f6b8b8;
-  --color-on-wrong: #5c0b0b;
-  --color-street: #e6007e;
-  --color-shadow: #00000033;
-  --font-body: system-ui, sans-serif;
-  --font-size: 18px;
-  --font-weight-feedback: 700;
-  --space-1: 6px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 20px;
-  --radius: 8px;
-  --border-width: 2px;
-  --target: 44px;
-}
-
-/* B, "arcade night": a dark panel, a yellow button, strong colors for right and wrong. */
-:root[data-theme="b"] {
-  --color-surface: #1b1f3b;
-  --color-text: #ffffff;
-  --color-border: #8c93c9;
-  --color-accent: #ffd23f;
-  --color-on-accent: #1b1f3b;
-  --color-right: #1e7a3c;
-  --color-on-right: #ffffff;
-  --color-wrong: #b3261e;
-  --color-on-wrong: #ffffff;
-  --color-street: #7b2ff7;
-  --color-shadow: #00000066;
-  --font-body: "Trebuchet MS", system-ui, sans-serif;
-  --font-weight-feedback: 800;
-  --radius: 4px;
-  --border-width: 3px;
-}
-
-/* C, "candy": a warm light panel, round pill shapes, an orange button. */
-:root[data-theme="c"] {
   --color-surface: #fff8e7;
   --color-text: #2b1b00;
   --color-border: #8a6d3b;
@@ -60,8 +16,15 @@
   --color-street: #0077ff;
   --color-shadow: #8a6d3b44;
   --font-body: ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif;
+  --font-size: 18px;
   --font-weight-feedback: 800;
+  --space-1: 6px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 20px;
   --radius: 999px;
+  --border-width: 2px;
+  --target: 44px;
 }
 
 html,

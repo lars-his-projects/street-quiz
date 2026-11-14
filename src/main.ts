@@ -3,7 +3,7 @@ import type { GeoJSONSource, LngLatBoundsLike } from "maplibre-gl";
 import { createForm, showResult } from "./form";
 import { addStreetLayer, createMap, streetData } from "./map";
 import { bounds, check, nextStreet, streetsFromGeoJson } from "./quiz";
-import { applyTheme, token } from "./theme";
+import { token } from "./theme";
 
 /** The stored area: the Jordaan in Amsterdam (`scripts/fetch_area.py 12011952 jordaan`, #8). */
 const AREA = "jordaan";
@@ -13,7 +13,6 @@ const WRONG_MS = 1800;
 async function start(): Promise<void> {
   const app = document.querySelector<HTMLElement>("#app");
   if (!app) return;
-  applyTheme(location.search);
   const quiz = createForm();
   const { form, input } = quiz;
   // The ids are for the browser test (`tests/browser/round.spec.ts`); the CSS uses the classes.
