@@ -1,7 +1,7 @@
 import "./style.css";
 import "./style-page.css";
 import type { LngLatBoundsLike } from "maplibre-gl";
-import { createForm, type QuizForm, showResult } from "./form";
+import { createForm, markOptions, type QuizForm, showMode, showResult } from "./form";
 import { addStreetLayer, createMap } from "./map";
 import { bounds, streetsFromGeoJson } from "./quiz";
 import { createStartForm, type StartForm, showAreas, showStatus } from "./start";
@@ -36,6 +36,8 @@ const SPRINGFIELD = [
   { name: "Springfield", label: "Springfield, Greene County, Missouri, United States", relation: 1 },
   { name: "Springfield", label: "Springfield, Sangamon County, Illinois, United States", relation: 2 },
 ];
+
+const NAMES = ["Keizersgracht", "Prinsengracht", "Herengracht", "Bloemgracht"];
 
 async function start(): Promise<void> {
   const main = document.querySelector<HTMLElement>("#components");
@@ -85,6 +87,31 @@ async function start(): Promise<void> {
       "Answer form: right",
       formIn((q) => {
         q.input.value = "Prinsengracht";
+        showResult(q, "right", "Right!");
+      }),
+    ),
+    section(
+      "Answer form: easy, four options",
+      formIn((q) => {
+        q.form.querySelector<HTMLInputElement>('input[value="easy"]')?.click();
+        showMode(q, "easy", NAMES, () => {});
+      }),
+    ),
+    section(
+      "Answer form: hard, a wrong tap (the correct option has a mark)",
+      formIn((q) => {
+        q.form.querySelector<HTMLInputElement>('input[value="hard"]')?.click();
+        showMode(q, "hard", NAMES, () => {});
+        markOptions(q, "Keizersgracht", "Prinsengracht");
+        showResult(q, "wrong", "Prinsengracht");
+      }),
+    ),
+    section(
+      "Answer form: easy, a right tap",
+      formIn((q) => {
+        q.form.querySelector<HTMLInputElement>('input[value="easy"]')?.click();
+        showMode(q, "easy", NAMES, () => {});
+        markOptions(q, "Prinsengracht", "Prinsengracht");
         showResult(q, "right", "Right!");
       }),
     ),
