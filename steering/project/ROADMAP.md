@@ -7,7 +7,7 @@ The goals of street-quiz and their features: done (`[x]`) or missing (`[ ]`). Th
 - [ ] `area:skeleton` One small area that is in the app, on a map with no street names: the app marks a street and you type its name
   - The app runs on a phone from its public address, with no account
   - A right answer and a wrong answer look different, and the next street comes
-- [ ] `area:name` You type the name of an area, such as "Amsterdam", and the app takes each street with a name in that area
+- [x] `area:name` You type the name of an area, such as "Amsterdam", and the app takes each street with a name in that area
   - The area can be a city, a town, a village or a part of a city, in each country
   - When more than one area has the name, you select the correct one from a list
   - The parts of one street count as one street
