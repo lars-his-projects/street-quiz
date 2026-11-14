@@ -11,3 +11,4 @@ the owner chose another option, `agent`: an agent decided and logged it, `-`: no
 - 2026-11-13 · hub card 7 · The app is fun, and each person can use it · other · P6, P4
 - 2026-11-13 · hub card 7 · The first selection is the name of an area. The shape drawing, the levels and more ways to answer come later · changed · P7
 - 2026-11-14 · hub card 6 · The starter session of the hub starts the runs of this project. The starter cannot select the effort of a run, so `.claude/settings.json` sets `effortLevel` to `low` for each run of this project. Raise it when the epics or the reviews of the deep lane are poor · agent · new (the quota standard S4 of the hub)
+- 2026-11-14 · session · The weekly pace does not limit the runs of this project until the owner can try the first version (`week_guard = false`); then it goes back to the pace of the other projects · other · new

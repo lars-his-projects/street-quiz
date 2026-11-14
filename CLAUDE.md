@@ -41,6 +41,9 @@ map up to date.
 - **P6, fun first:** the quiz is fast and feels like a game. A feature that makes it slow or heavy needs a strong reason.
 - **P7, start simple:** the first selection is the name of an area, and the first answer is a typed name. Other ways
   come in the sequence of the roadmap.
+- **The start of the project (owner, 2026-11-14):** the weekly pace does not limit the runs until the owner can try
+  the first version with the name of an area. The PR that sets `area:name` to `[x]` in the roadmap also sets
+  `week_guard = true` in `steering/system/system.toml` and removes this line.
 
 @framework/CLAUDE.md
 @docs/LEARNINGS.md
