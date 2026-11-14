@@ -4,6 +4,7 @@ import type { LngLatBoundsLike } from "maplibre-gl";
 import { createForm, type QuizForm, showResult } from "./form";
 import { addStreetLayer, createMap } from "./map";
 import { bounds, streetsFromGeoJson } from "./quiz";
+import { createStartForm, type StartForm, showAreas, showStatus } from "./start";
 import { token } from "./theme";
 
 /** The style page (#17): each component of the app in each state. */
@@ -24,6 +25,18 @@ function formIn(state: (quiz: QuizForm) => void): HTMLElement {
   return quiz.form;
 }
 
+function startIn(state: (start: StartForm) => void): HTMLElement {
+  const start = createStartForm();
+  start.form.addEventListener("submit", (event) => event.preventDefault());
+  state(start);
+  return start.form;
+}
+
+const SPRINGFIELD = [
+  { name: "Springfield", label: "Springfield, Greene County, Missouri, United States", relation: 1 },
+  { name: "Springfield", label: "Springfield, Sangamon County, Illinois, United States", relation: 2 },
+];
+
 async function start(): Promise<void> {
   const main = document.querySelector<HTMLElement>("#components");
   if (!main) return;
@@ -32,6 +45,32 @@ async function start(): Promise<void> {
   mapBox.className = "map";
   main.append(
     section("Marked street on the map, with the attribution", mapBox),
+    section(
+      "Start form: empty",
+      startIn(() => {}),
+    ),
+    section(
+      "Start form: a list of areas",
+      startIn((s) => {
+        s.input.value = "Springfield";
+        showStatus(s, "", "Select the area:");
+        showAreas(s, SPRINGFIELD, () => {});
+      }),
+    ),
+    section(
+      "Start form: wait",
+      startIn((s) => {
+        s.input.value = "Jordaan";
+        showStatus(s, "wait", "Loading the streets of Jordaan…");
+      }),
+    ),
+    section(
+      "Start form: error",
+      startIn((s) => {
+        s.input.value = "Jordaan";
+        showStatus(s, "error", "The street service did not answer. Try again.");
+      }),
+    ),
     section(
       "Answer form: empty",
       formIn(() => {}),

@@ -36,7 +36,7 @@ async function open(page: Page, faults: string[]): Promise<Street[]> {
     },
   );
   const area = await page.request.get("areas/jordaan.geojson");
-  await page.goto("./");
+  await page.goto("./?area=jordaan");
   await expect(page.locator("#app")).toHaveAttribute("data-drawn", "true", { timeout: 20_000 });
   return streetsFromGeoJson(await area.json());
 }

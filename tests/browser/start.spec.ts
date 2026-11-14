@@ -17,7 +17,7 @@ test("the first position of the map is inside the stored area", async ({ page })
   const points = area.flatMap((street) => street.lines.flat());
   const lngs = points.map(([lng]) => lng);
   const lats = points.map(([, lat]) => lat);
-  await page.goto("./");
+  await page.goto("./?area=jordaan");
   await expect(page.locator("#app")).toHaveAttribute("data-drawn", "true", { timeout: 20_000 });
   const [lng, lat] = ((await page.locator("#app").getAttribute("data-start")) ?? "").split(" ").map(Number);
   expect(lng).toBeGreaterThanOrEqual(Math.min(...lngs));
