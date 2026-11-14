@@ -25,6 +25,28 @@ export function nextStreet(streets: Street[], last?: Street, random: () => numbe
   return choices[Math.floor(random() * choices.length)];
 }
 
+/** Give up to four different names (by `normalize`): the name of the street and three other names, in random order. */
+export function choices(streets: Street[], street: Street, random: () => number = Math.random): string[] {
+  const seen = new Set([normalizeStreetName(street.name)]);
+  const others: string[] = [];
+  for (const s of streets) {
+    const key = normalizeStreetName(s.name);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    others.push(s.name);
+  }
+  const names = [street.name];
+  while (names.length < 4 && others.length > 0) {
+    names.push(others.splice(Math.floor(random() * others.length), 1)[0]);
+  }
+  // Fisher-Yates shuffle: the position of the correct name is random.
+  for (let i = names.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [names[i], names[j]] = [names[j], names[i]];
+  }
+  return names;
+}
+
 /** Return true when the typed answer is the name of the street (no case, no accents). */
 export function check(answer: string, street: Street): boolean {
   return normalizeStreetName(answer) === normalizeStreetName(street.name);
