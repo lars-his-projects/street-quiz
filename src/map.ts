@@ -21,3 +21,24 @@ export function createMap(container: HTMLElement): MapLibreMap {
   map.setStyle(STYLE_URL, { transformStyle: (_previous, next) => hideLabels(next) });
   return map;
 }
+
+/** The data of the marked street. */
+export function streetData(lines: [number, number][][]) {
+  return {
+    type: "Feature" as const,
+    properties: {},
+    geometry: { type: "MultiLineString" as const, coordinates: lines },
+  };
+}
+
+/** Add the layer of the marked street in the color of the theme (`--color-street`). */
+export function addStreetLayer(map: MapLibreMap, lines: [number, number][][], color: string): void {
+  map.addSource("street", { type: "geojson", data: streetData(lines) });
+  map.addLayer({
+    id: "street",
+    type: "line",
+    source: "street",
+    layout: { "line-cap": "round", "line-join": "round" },
+    paint: { "line-color": color, "line-width": 9, "line-opacity": 0.9 },
+  });
+}
