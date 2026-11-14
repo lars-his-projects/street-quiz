@@ -4,7 +4,10 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Goedestraat"
+        "name": "Goedestraat",
+        "length": 136,
+        "highway": "residential",
+        "lanes": 1
       },
       "geometry": {
         "type": "MultiLineString",
@@ -14,7 +17,10 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Mixstraat"
+        "name": "Mixstraat",
+        "length": 204,
+        "highway": "residential",
+        "lanes": 1
       },
       "geometry": {
         "type": "MultiLineString",

@@ -18,6 +18,7 @@ The data is © OpenStreetMap contributors (Open Database License, https://www.op
 
 import json
 import math
+import re
 import sys
 import urllib.error
 import urllib.parse
@@ -65,6 +66,16 @@ def is_street_way(element: dict) -> bool:
     )
 
 
+def lanes_value(text: str | None) -> int | None:
+    """Return the value of a `lanes` tag, or None when it is missing or not a whole number."""
+    return int(text.strip()) if text is not None and re.fullmatch(r"\s*\d{1,3}\s*", text) else None
+
+
+def main_class(length_by_class: dict[str, float]) -> str:
+    """Return the `highway` class with the largest length (the first in the alphabet when equal)."""
+    return min(length_by_class, key=lambda name: (-length_by_class[name], name))
+
+
 def overpass_to_streets(answer: dict) -> dict:
     """Make a GeoJSON FeatureCollection from an Overpass JSON answer (`out geom`).
 
@@ -73,6 +84,8 @@ def overpass_to_streets(answer: dict) -> dict:
     lines_by_name: dict[str, list[list[list[float]]]] = {}
     length_by_name: dict[str, float] = {}
     bridge_by_name: dict[str, float] = {}
+    class_length_by_name: dict[str, dict[str, float]] = {}
+    lanes_by_name: dict[str, int] = {}
     for element in answer.get("elements", []):
         if not is_street_way(element):
             continue
@@ -82,12 +95,22 @@ def overpass_to_streets(answer: dict) -> dict:
         length = line_length(line)
         lines_by_name.setdefault(name, []).append(line)
         length_by_name[name] = length_by_name.get(name, 0.0) + length
+        classes = class_length_by_name.setdefault(name, {})
+        classes[tags.get("highway", "")] = classes.get(tags.get("highway", ""), 0.0) + length
+        lanes = lanes_value(tags.get("lanes"))
+        if lanes is not None:
+            lanes_by_name[name] = max(lanes_by_name.get(name, lanes), lanes)
         if tags.get("bridge", "no") != "no":
             bridge_by_name[name] = bridge_by_name.get(name, 0.0) + length
     features = [
         {
             "type": "Feature",
-            "properties": {"name": name},
+            "properties": {
+                "name": name,
+                "length": int(length_by_name[name] + 0.5),
+                "highway": main_class(class_length_by_name[name]),
+                "lanes": lanes_by_name.get(name, 1),
+            },
             "geometry": {"type": "MultiLineString", "coordinates": lines},
         }
         for name, lines in sorted(lines_by_name.items())
