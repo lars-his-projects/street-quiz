@@ -98,6 +98,13 @@ async function start(): Promise<void> {
       }),
     ),
     section(
+      "Answer form: hard, a long name wraps inside its option button",
+      formIn((q) => {
+        q.form.querySelector<HTMLInputElement>('input[value="hard"]')?.click();
+        showMode(q, "hard", ["Tweede Egelantiersdwarsstraat", ...NAMES.slice(0, 3)], () => {});
+      }),
+    ),
+    section(
       "Answer form: hard, a wrong tap (the correct option has a mark)",
       formIn((q) => {
         q.form.querySelector<HTMLInputElement>('input[value="hard"]')?.click();
