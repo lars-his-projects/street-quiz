@@ -3,7 +3,7 @@ import type { GeoJSONSource, LngLatBoundsLike } from "maplibre-gl";
 import { streetsOfArea } from "./area";
 import { createForm, markOptions, selectedMode, showMode, showResult } from "./form";
 import { type AreaResult, findAreas } from "./geocode";
-import { addStreetLayer, createMap, FIT_OPTIONS, streetData } from "./map";
+import { addOtherLayer, addStreetLayer, createMap, FIT_OPTIONS, otherData, streetData } from "./map";
 import { bounds, check, choices, nearChoices, nextStreet, type Street, streetsFromGeoJson } from "./quiz";
 import { createStartForm, showAreas, showStatus } from "./start";
 import { token } from "./theme";
@@ -98,7 +98,11 @@ function play(app: HTMLElement, streets: Street[]): void {
     if (answered) return goNext();
     answered = true;
     const right = check(name, street);
-    markOptions(quiz, name, street.name);
+    // Draw the other options on the map too, each in the color of the dot on its button (#58).
+    const others = markOptions(quiz, name, street.name).map((n) => streets.find((s) => s.name === n));
+    const drawn = others.filter((s): s is Street => s !== undefined);
+    map.getSource<GeoJSONSource>("others")?.setData(otherData(drawn));
+    app.dataset.others = String(drawn.length);
     showResult(quiz, right ? "right" : "wrong", right ? "Right!" : street.name);
   };
   const showOptions = () => {
@@ -109,6 +113,8 @@ function play(app: HTMLElement, streets: Street[]): void {
   const show = () => {
     showOptions();
     map.getSource<GeoJSONSource>("street")?.setData(streetData(street.lines));
+    map.getSource<GeoJSONSource>("others")?.setData(otherData([]));
+    delete app.dataset.others;
     app.dataset.street = String(streets.indexOf(street));
     delete app.dataset.drawn;
     if (!first) fitStreet(400);
@@ -135,6 +141,7 @@ function play(app: HTMLElement, streets: Street[]): void {
   // The style can load before the streets: then the event `load` came already (#15).
   const addStreet = () => {
     addStreetLayer(map, street.lines, token("--color-street"));
+    addOtherLayer(map, [token("--color-other-1"), token("--color-other-2"), token("--color-other-3")]);
     show();
   };
   if (map.isStyleLoaded()) addStreet();
