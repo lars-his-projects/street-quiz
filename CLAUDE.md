@@ -35,9 +35,10 @@ map up to date.
   `src/map.ts` makes the map and gives MapLibre the address of its worker file (`tests/build_worker.test.ts`).
 - `src/start.ts` – the start form (name of an area, list, wait and error text); `src/area.ts` gets the streets of an
   area from the store, else from Overpass (the servers and query of `scripts/fetch_area.py`) (#32).
+- `src/rank.ts` – the rank of a street (length × class weight × lanes factor) and `byRank` (#44).
 - `src/store.ts` – keeps the GeoJSON of an area on the device (IndexedDB, key: OSM relation id): `saveArea`, `loadArea`.
 - The design system (#17): `src/style.css` has the tokens (CSS variables) of the look "candy" (#21); a rule uses only
-  tokens (`tests/theme_tokens.test.ts`). `src/form.ts` makes the answer form, `src/theme.ts` reads a token.
+  tokens (`tests/theme_tokens.test.ts`). `src/form.ts` makes the answer form (the mode switch and the option buttons, #39), `src/theme.ts` reads a token.
   `style.html` (`src/style-page.ts`) shows each component in each state with the same CSS and markup as the app.
 - `public/areas/<slug>.geojson` – the stored streets of an area, made by `scripts/fetch_area.py` (an agent runs it).
   The top of the script says what a street of the quiz is. The app starts with the start form; `?area=jordaan` starts the stored Jordaan at once (the browser tests).
