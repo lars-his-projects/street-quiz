@@ -1,0 +1,26 @@
+[
+  {
+    "osm_type": "relation",
+    "osm_id": 111,
+    "name": "Springfield",
+    "category": "boundary",
+    "type": "administrative",
+    "display_name": "Springfield, Greene County, Missouri, United States"
+  },
+  {
+    "osm_type": "way",
+    "osm_id": 5,
+    "name": "Springfield Road",
+    "category": "highway",
+    "type": "residential",
+    "display_name": "Springfield Road, Belfast, UK"
+  },
+  {
+    "osm_type": "relation",
+    "osm_id": 222,
+    "name": "Springfield",
+    "category": "boundary",
+    "type": "administrative",
+    "display_name": "Springfield, Sangamon County, Illinois, United States"
+  }
+]
