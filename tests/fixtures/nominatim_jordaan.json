@@ -1,0 +1,18 @@
+[
+  {
+    "osm_type": "relation",
+    "osm_id": 1234567,
+    "name": "Jordaan",
+    "category": "boundary",
+    "type": "administrative",
+    "display_name": "Jordaan, Amsterdam, Noord-Holland, Nederland"
+  },
+  {
+    "osm_type": "node",
+    "osm_id": 42,
+    "name": "Jordaan",
+    "category": "place",
+    "type": "suburb",
+    "display_name": "Jordaan, Amsterdam, Nederland"
+  }
+]
