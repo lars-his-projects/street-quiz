@@ -3,8 +3,8 @@ import type { GeoJSONSource, LngLatBoundsLike } from "maplibre-gl";
 import { createMap } from "./map";
 import { bounds, check, nextStreet, type Street, streetsFromGeoJson } from "./quiz";
 
-/** The stored area. The owner's area file replaces the sample (#8). */
-const AREA = "sample";
+/** The stored area: the Jordaan in Amsterdam (`scripts/fetch_area.py 12011952 jordaan`, #8). */
+const AREA = "jordaan";
 const FLASH_MS = 700;
 const WRONG_MS = 1800;
 
