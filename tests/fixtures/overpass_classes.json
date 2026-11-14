@@ -1,0 +1,95 @@
+{
+  "elements": [
+    {
+      "type": "way",
+      "id": 1,
+      "tags": {
+        "highway": "primary",
+        "name": "Hoofdweg",
+        "lanes": "2"
+      },
+      "geometry": [
+        {
+          "lat": 52.37,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.37,
+          "lon": 4.884
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 2,
+      "tags": {
+        "highway": "secondary",
+        "name": "Middenlaan"
+      },
+      "geometry": [
+        {
+          "lat": 52.371,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.371,
+          "lon": 4.885
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 3,
+      "tags": {
+        "highway": "tertiary",
+        "name": "Kruisstraat"
+      },
+      "geometry": [
+        {
+          "lat": 52.372,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.372,
+          "lon": 4.886
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 4,
+      "tags": {
+        "highway": "residential",
+        "name": "Lange Dwarsstraat"
+      },
+      "geometry": [
+        {
+          "lat": 52.373,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.373,
+          "lon": 4.892
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 5,
+      "tags": {
+        "highway": "living_street",
+        "name": "Kinderpad"
+      },
+      "geometry": [
+        {
+          "lat": 52.374,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.374,
+          "lon": 4.884
+        }
+      ]
+    }
+  ]
+}
