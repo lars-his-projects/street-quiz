@@ -47,6 +47,36 @@ export function choices(streets: Street[], street: Street, random: () => number 
   return names;
 }
 
+/** Return the center of the box of the street as [lon, lat]. */
+function center(street: Street): [number, number] {
+  const [w, s, e, n] = bounds(street);
+  return [(w + e) / 2, (s + n) / 2];
+}
+
+/** Give up to four different names (by `normalize`): the name of the street and the three names with the nearest centers, in random order. */
+export function nearChoices(streets: Street[], street: Street, random: () => number = Math.random): string[] {
+  const [cx, cy] = center(street);
+  const distance = (s: Street) => {
+    const [x, y] = center(s);
+    return (x - cx) ** 2 + (y - cy) ** 2;
+  };
+  const seen = new Set([normalizeStreetName(street.name)]);
+  const names = [street.name];
+  for (const s of [...streets].sort((a, b) => distance(a) - distance(b))) {
+    if (names.length >= 4) break;
+    const key = normalizeStreetName(s.name);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    names.push(s.name);
+  }
+  // Fisher-Yates shuffle: the position of the correct name is random.
+  for (let i = names.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [names[i], names[j]] = [names[j], names[i]];
+  }
+  return names;
+}
+
 /** Return true when the typed answer is the name of the street (no case, no accents). */
 export function check(answer: string, street: Street): boolean {
   return normalizeStreetName(answer) === normalizeStreetName(street.name);
