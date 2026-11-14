@@ -8,6 +8,8 @@ you recommend an option, compare it with these principles and name the principle
 
 The questions are plain: the name of a marked street, or the street of a given name. The app asks no question about
 history or facts. Example: the quiz never asks who a street is named after.
+Later the same holds for other things with a name on the map, such as a bridge or a zone (the Jordaan as an
+answer): goal 5 of `ROADMAP.md` (owner, 2026-11-14).
 
 ## P2. A real map
 

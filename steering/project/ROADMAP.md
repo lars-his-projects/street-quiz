@@ -62,3 +62,13 @@ The goals of street-quiz and their features: done (`[x]`) or missing (`[ ]`). Th
 - [ ] `app:languages` The texts of the app are in English and Dutch
 - [ ] `app:share` Share an area or a route with a link, and the other person gets the same streets
 - [ ] `app:feedback` A feedback button sends what you saw and what you did (the feedback standard of the fleet)
+
+## 5. More than streets
+
+- [ ] `kinds:bridges` The bridges of an area: the app marks a bridge and you give its name
+  - The names come from OpenStreetMap. The street script leaves the bridges out of the streets now (`scripts/fetch_area.py`)
+- [ ] `kinds:zones` The zones of an area: the app marks a zone, such as the Jordaan in Amsterdam, and you give its name
+  - A zone is a part of a city with a name: a neighbourhood, a quarter or a district
+- [ ] `kinds:select` You select what you learn in an area: streets, bridges, zones or a mix
+- [ ] `kinds:more` Other things with a name on the map
+  - Ideas: squares, parks, canals and stations. The owner selects the kinds: one card with examples from one area

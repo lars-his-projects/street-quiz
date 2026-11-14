@@ -11,6 +11,7 @@ The agent writes here what it learned the hard way. Each line must save time in 
 ## Code
 
 - The CSS of MapLibre comes after `src/style.css` in the bundle: a rule of the same weight for a `.maplibregl-*` class loses. Do not move a map control with CSS. Keep the map and the other parts of the page apart in the layout (the attribution was on the answer field, 2026-11-14).
+- A Playwright script must not set `Math.random` for the whole page: MapLibre uses it for its tiles, and the map stays empty. The tiles of the real map come slowly in a cloud session: wait for `networkidle`, not for a fixed 5 s (#17).
 - A page check that blocks the outside requests does not show that the map works. Do level 4 of the `verify` skill with the real map, and read the console errors.
 - A fixed `Math.random` (`addInitScript`) stops MapLibre GL JS: the map never gets idle. The browser test reads the marked street from `data-street` of `#app` (#14).
 - MapLibre hides the attribution when no visible layer uses a source with an `attribution`: a stored test style needs one such layer (#14).

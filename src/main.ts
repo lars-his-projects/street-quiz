@@ -1,28 +1,26 @@
 import "./style.css";
 import type { GeoJSONSource, LngLatBoundsLike } from "maplibre-gl";
-import { createMap } from "./map";
-import { bounds, check, nextStreet, type Street, streetsFromGeoJson } from "./quiz";
+import { createForm, showResult } from "./form";
+import { addStreetLayer, createMap, streetData } from "./map";
+import { bounds, check, nextStreet, streetsFromGeoJson } from "./quiz";
+import { applyTheme, token } from "./theme";
 
 /** The stored area: the Jordaan in Amsterdam (`scripts/fetch_area.py 12011952 jordaan`, #8). */
 const AREA = "jordaan";
 const FLASH_MS = 700;
 const WRONG_MS = 1800;
 
-const app = document.querySelector<HTMLElement>("#app");
-const form = document.querySelector<HTMLFormElement>("#quiz");
-const input = document.querySelector<HTMLInputElement>("#answer");
-const feedback = document.querySelector<HTMLElement>("#feedback");
-
-function streetData(street: Street) {
-  return {
-    type: "Feature" as const,
-    properties: {},
-    geometry: { type: "MultiLineString" as const, coordinates: street.lines },
-  };
-}
-
 async function start(): Promise<void> {
-  if (!app || !form || !input || !feedback) return;
+  const app = document.querySelector<HTMLElement>("#app");
+  if (!app) return;
+  applyTheme(location.search);
+  const quiz = createForm();
+  const { form, input } = quiz;
+  // The ids are for the browser test (`tests/browser/round.spec.ts`); the CSS uses the classes.
+  form.id = "quiz";
+  input.id = "answer";
+  quiz.feedback.id = "feedback";
+  document.body.append(form);
   const map = createMap(app);
   const response = await fetch(`${import.meta.env.BASE_URL}areas/${AREA}.geojson`);
   const streets = streetsFromGeoJson(await response.json());
@@ -32,7 +30,7 @@ async function start(): Promise<void> {
   const fitStreet = (duration: number) =>
     map.fitBounds(bounds(street) as LngLatBoundsLike, { padding: 80, maxZoom: 17, duration });
   const show = () => {
-    map.getSource<GeoJSONSource>("street")?.setData(streetData(street));
+    map.getSource<GeoJSONSource>("street")?.setData(streetData(street.lines));
     app.dataset.street = String(streets.indexOf(street));
     delete app.dataset.drawn;
     fitStreet(400);
@@ -57,14 +55,7 @@ async function start(): Promise<void> {
 
   // The style can load before the streets: then the event `load` came already (#15).
   const addStreet = () => {
-    map.addSource("street", { type: "geojson", data: streetData(street) });
-    map.addLayer({
-      id: "street",
-      type: "line",
-      source: "street",
-      layout: { "line-cap": "round", "line-join": "round" },
-      paint: { "line-color": "#e6007e", "line-width": 9, "line-opacity": 0.9 },
-    });
+    addStreetLayer(map, street.lines, token("--color-street"));
     show();
   };
   if (map.isStyleLoaded()) addStreet();
@@ -86,12 +77,10 @@ async function start(): Promise<void> {
     if (busy || input.value.trim() === "") return;
     busy = true;
     const right = check(input.value, street);
-    form.className = right ? "right" : "wrong";
-    feedback.textContent = right ? "Right!" : street.name;
+    showResult(quiz, right ? "right" : "wrong", right ? "Right!" : street.name);
     setTimeout(
       () => {
-        form.className = "";
-        feedback.textContent = "";
+        showResult(quiz, "", "");
         input.value = "";
         street = nextStreet(streets, street);
         show();
