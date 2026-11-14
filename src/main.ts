@@ -31,6 +31,7 @@ async function start(): Promise<void> {
 
   const show = () => {
     map.getSource<GeoJSONSource>("street")?.setData(streetData(street));
+    app.dataset.street = String(streets.indexOf(street));
     map.fitBounds(bounds(street) as LngLatBoundsLike, { padding: 80, maxZoom: 17, duration: 400 });
   };
 
@@ -44,6 +45,13 @@ async function start(): Promise<void> {
       paint: { "line-color": "#e6007e", "line-width": 9, "line-opacity": 0.9 },
     });
     show();
+  });
+
+  // A mark for the browser test (`tests/browser/round.spec.ts`): the index of the marked street, and
+  // `drawn` when the map is idle and drew it.
+  map.on("idle", () => {
+    const drawn = map.getLayer("street") !== undefined && map.queryRenderedFeatures({ layers: ["street"] }).length > 0;
+    app.dataset.drawn = String(drawn);
   });
 
   form.addEventListener("submit", (event) => {

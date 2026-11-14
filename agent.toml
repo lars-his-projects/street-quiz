@@ -13,12 +13,12 @@ paused = "paused"
 install = "python3 -m pip install -r requirements-dev.txt && npm ci"
 lint = "ruff check . && npx @biomejs/biome check ."
 fast = "python3 -m pytest -q && npx vitest run"
-slow = ""                       # no slow level yet: the first feature adds Playwright (`npx playwright test`)
+slow = "npx playwright test"          # the browser tests (#14): the built app in Chromium
 server = ""
 dev = "npm run dev"             # starts the development server for the agents; the owner tries a feature on the live preview
 
 [ci]                            # framework/tools/ship_pr.py
-gates = []                      # the PR checks of ci.yml besides `quick` that Automerge needs green (for example ["browser"])
+gates = ["browser"]             # the PR checks of ci.yml besides `quick` that Automerge needs green
 
 [docs]
 system = "framework/docs/SYSTEM.md"

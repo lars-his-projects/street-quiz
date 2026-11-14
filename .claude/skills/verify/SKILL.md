@@ -25,8 +25,9 @@ The build also checks the types and makes `dist/`. Never commit `dist/`.
 
     npx playwright test
 
-No browser test exists yet. The first ticket that needs one adds `@playwright/test` and `playwright.config.ts`, and
-puts the command into `slow` of `agent.toml`.
+`tests/browser/*.spec.ts` (`playwright.config.ts`) builds the app and opens it with `vite preview`. The test fails on a
+console error, a status of 400 or more, and a request to another host (P3). Stop each `vite preview` of your own
+first: the test uses a server that already runs, also with an old build. CI runs it in the job `browser`.
 
 ## Level 4: images in the PR (each change that a user sees)
 

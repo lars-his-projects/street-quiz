@@ -13,3 +13,6 @@ coverage/
 *.tsbuildinfo
 # Scratch output
 out/
+# Playwright output
+test-results/
+playwright-report/
