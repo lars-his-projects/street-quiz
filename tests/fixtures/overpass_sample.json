@@ -1,0 +1,157 @@
+{
+  "elements": [
+    {
+      "type": "way",
+      "id": 1,
+      "tags": {
+        "highway": "residential",
+        "name": "Goedestraat"
+      },
+      "geometry": [
+        {
+          "lat": 52.37,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.37,
+          "lon": 4.881
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 2,
+      "tags": {
+        "highway": "residential",
+        "name": "Goedestraat"
+      },
+      "geometry": [
+        {
+          "lat": 52.371,
+          "lon": 4.882
+        },
+        {
+          "lat": 52.371,
+          "lon": 4.883
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 3,
+      "tags": {
+        "highway": "residential",
+        "name": "Privaatweg",
+        "access": "private"
+      },
+      "geometry": [
+        {
+          "lat": 52.372,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.372,
+          "lon": 4.881
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 4,
+      "tags": {
+        "highway": "platform",
+        "name": "Perron"
+      },
+      "geometry": [
+        {
+          "lat": 52.373,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.373,
+          "lon": 4.881
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 5,
+      "tags": {
+        "highway": "residential",
+        "name": "Brugstraat",
+        "bridge": "yes"
+      },
+      "geometry": [
+        {
+          "lat": 52.374,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.374,
+          "lon": 4.881
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 6,
+      "tags": {
+        "highway": "residential",
+        "name": "Stip"
+      },
+      "geometry": [
+        {
+          "lat": 52.375,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.375,
+          "lon": 4.88002
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 7,
+      "tags": {
+        "highway": "residential",
+        "name": "Mixstraat",
+        "bridge": "yes"
+      },
+      "geometry": [
+        {
+          "lat": 52.376,
+          "lon": 4.88
+        },
+        {
+          "lat": 52.376,
+          "lon": 4.881
+        }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 8,
+      "tags": {
+        "highway": "residential",
+        "name": "Mixstraat"
+      },
+      "geometry": [
+        {
+          "lat": 52.376,
+          "lon": 4.881
+        },
+        {
+          "lat": 52.376,
+          "lon": 4.883
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": 9,
+      "lat": 52.37,
+      "lon": 4.88
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Goedestraat"
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [[[4.88, 52.37], [4.881, 52.37]], [[4.882, 52.371], [4.883, 52.371]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mixstraat"
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [[[4.88, 52.376], [4.881, 52.376]], [[4.881, 52.376], [4.883, 52.376]]]
+      }
+    }
+  ]
+}

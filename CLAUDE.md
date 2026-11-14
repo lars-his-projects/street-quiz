@@ -30,6 +30,7 @@ map up to date.
   served from https://lars-his-projects.github.io/street-quiz/.
 - `src/` – the logic and the map code. `src/normalize.ts` compares street names (lower case, no accents, ß as ss, trimmed).
   `src/quiz.ts` is the logic of a round (no map code); `src/main.ts` draws the marked street and the answer form, follows the visual viewport (phone keyboard) and sets marks on `#app` for `tests/browser/`.
+  `src/overpass.ts` turns an Overpass answer into streets with the rules of `scripts/fetch_area.py` (pure, no `fetch`; `tests/fixtures/overpass_sample*.json` feed both languages).
   `src/geocode.ts` builds the Nominatim search URL and keeps only the relations of an area (`tests/geocode.test.ts`, stored responses in `tests/fixtures/`).
   `src/map.ts` makes the map and gives MapLibre the address of its worker file (`tests/build_worker.test.ts`).
 - `src/store.ts` – keeps the GeoJSON of an area on the device (IndexedDB, key: OSM relation id): `saveArea`, `loadArea`.
