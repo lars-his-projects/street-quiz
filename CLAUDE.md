@@ -29,7 +29,7 @@ map up to date.
 - `index.html`, `src/main.ts` – the page and its entry point. `vite.config.ts` sets `base: "/street-quiz/"`: the app is
   served from https://lars-his-projects.github.io/street-quiz/.
 - `src/` – the logic and the map code. `src/normalize.ts` compares street names (lower case, no accents, ß as ss, trimmed).
-  `src/quiz.ts` is the logic of a round (no map code); `src/main.ts` draws the marked street and the answer form.
+  `src/quiz.ts` is the logic of a round (no map code); `src/main.ts` draws the marked street and the answer form, follows the visual viewport (phone keyboard) and sets marks on `#app` for `tests/browser/`.
   `src/map.ts` makes the map and gives MapLibre the address of its worker file (`tests/build_worker.test.ts`).
 - The design system (#17): `src/style.css` has the tokens (CSS variables) and the themes; a rule uses only tokens
   (`tests/theme_tokens.test.ts`). `src/form.ts` makes the answer form, `src/theme.ts` sets the theme (`?theme=b`).

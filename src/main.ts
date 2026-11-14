@@ -27,22 +27,49 @@ async function start(): Promise<void> {
   let street = nextStreet(streets);
   let busy = false;
 
+  const fitStreet = (duration: number) =>
+    map.fitBounds(bounds(street) as LngLatBoundsLike, { padding: 80, maxZoom: 17, duration });
   const show = () => {
     map.getSource<GeoJSONSource>("street")?.setData(streetData(street.lines));
     app.dataset.street = String(streets.indexOf(street));
-    map.fitBounds(bounds(street) as LngLatBoundsLike, { padding: 80, maxZoom: 17, duration: 400 });
+    delete app.dataset.drawn;
+    fitStreet(400);
   };
 
-  map.on("load", () => {
-    addStreetLayer(map, street.lines, token("--color-street"));
-    show();
+  // A phone keyboard makes only the visual viewport smaller (#15): the page follows its height and does not
+  // scroll, so the map and the form fill the part that the user sees. After each change of the map size, fit the
+  // street again.
+  const viewport = window.visualViewport;
+  if (viewport) {
+    const follow = () => {
+      document.body.style.height = `${viewport.height}px`;
+      window.scrollTo(0, 0);
+    };
+    viewport.addEventListener("resize", follow);
+    viewport.addEventListener("scroll", follow);
+    follow();
+  }
+  map.on("resize", () => {
+    if (map.getLayer("street")) fitStreet(0);
   });
 
-  // A mark for the browser test (`tests/browser/round.spec.ts`): the index of the marked street, and
-  // `drawn` when the map is idle and drew it.
+  // The style can load before the streets: then the event `load` came already (#15).
+  const addStreet = () => {
+    addStreetLayer(map, street.lines, token("--color-street"));
+    show();
+  };
+  if (map.isStyleLoaded()) addStreet();
+  else map.once("load", addStreet);
+
+  // A mark for the browser test (`tests/browser/round.spec.ts`): the index of the marked street, `drawn` when the map is idle and
+  // drew it, and `box` (the box of the street on the map in pixels: left top right bottom).
   map.on("idle", () => {
     const drawn = map.getLayer("street") !== undefined && map.queryRenderedFeatures({ layers: ["street"] }).length > 0;
     app.dataset.drawn = String(drawn);
+    const [west, south, east, north] = bounds(street);
+    const a = map.project([west, north]);
+    const b = map.project([east, south]);
+    app.dataset.box = [a.x, a.y, b.x, b.y].map(Math.round).join(" ");
   });
 
   form.addEventListener("submit", (event) => {
