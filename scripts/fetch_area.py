@@ -6,7 +6,7 @@ The script asks the Overpass API for the ways with `highway` and `name` in the
 area of the OSM relation, and writes `public/areas/<SLUG>.geojson`: one feature
 per street name, a MultiLineString with all parts of that street.
 
-Do not run it in CI or in a cloud session (P3): the owner runs it on a computer.
+Do not run it in CI or in a test (P3). An agent or the owner runs it on purpose, one time for one area.
 """
 
 import json

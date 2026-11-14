@@ -38,8 +38,9 @@ map up to date.
 
 - **P1, a flashcard, not a trivia game:** the quiz asks only for the name of a marked street or the street of a given
   name. It never asks about history or facts (`steering/project/PRINCIPLES.md`).
-- **P3, open data and free services:** no code sends a request to a map or data service from CI or from a cloud
-  session. Tests use stored data. Keep the data on the device.
+- **P3, open data and free services:** tests and CI use stored data and send no request to a map or data service.
+  An agent can get OpenStreetMap data on purpose for the stored data of an area or of a test, with few and small
+  requests (`scripts/fetch_area.py`). Keep the data on the device.
 - **P6, fun first:** the quiz is fast and feels like a game. A feature that makes it slow or heavy needs a strong reason.
 - **P7, start simple:** the first selection is the name of an area, and the first answer is a typed name. Other ways
   come in the sequence of the roadmap.
