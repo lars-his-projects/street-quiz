@@ -1,7 +1,7 @@
 import "./style.css";
 import type { GeoJSONSource, LngLatBoundsLike } from "maplibre-gl";
 import { createForm, showResult } from "./form";
-import { addStreetLayer, createMap, streetData } from "./map";
+import { addStreetLayer, createMap, FIT_OPTIONS, streetData } from "./map";
 import { bounds, check, nextStreet, streetsFromGeoJson } from "./quiz";
 import { token } from "./theme";
 
@@ -18,21 +18,26 @@ async function start(): Promise<void> {
   input.id = "answer";
   quiz.feedback.id = "feedback";
   document.body.append(form);
-  const map = createMap(app);
   const response = await fetch(`${import.meta.env.BASE_URL}areas/${AREA}.geojson`);
   const streets = streetsFromGeoJson(await response.json());
   let street = nextStreet(streets);
+  // The map starts at the first street: it asks for no tile of another place, and it makes no move (#16).
+  const map = createMap(app, bounds(street) as LngLatBoundsLike);
+  const start = map.getCenter();
+  app.dataset.start = `${start.lng} ${start.lat}`;
   // After an answer, the result stays on screen until the user goes on (#23): the button then says "Next".
   let answered = false;
   const button = form.querySelector<HTMLButtonElement>("button");
 
   const fitStreet = (duration: number) =>
-    map.fitBounds(bounds(street) as LngLatBoundsLike, { padding: 80, maxZoom: 17, duration });
+    map.fitBounds(bounds(street) as LngLatBoundsLike, { ...FIT_OPTIONS, duration });
+  let first = true;
   const show = () => {
     map.getSource<GeoJSONSource>("street")?.setData(streetData(street.lines));
     app.dataset.street = String(streets.indexOf(street));
     delete app.dataset.drawn;
-    fitStreet(400);
+    if (!first) fitStreet(400);
+    first = false;
   };
 
   // A phone keyboard makes only the visual viewport smaller (#15): the page follows its height and does not

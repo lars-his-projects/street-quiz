@@ -58,10 +58,10 @@ async function start(): Promise<void> {
     ),
   );
 
-  const map = createMap(mapBox);
   const response = await fetch(`${import.meta.env.BASE_URL}areas/${AREA}.geojson`);
   const streets = streetsFromGeoJson(await response.json());
   const street = streets.find((s) => s.name === "Prinsengracht") ?? streets[0];
+  const map = createMap(mapBox, bounds(street) as LngLatBoundsLike);
   map.on("load", () => {
     addStreetLayer(map, street.lines, token("--color-street"));
     map.fitBounds(bounds(street) as LngLatBoundsLike, { padding: 40, maxZoom: 17, duration: 0 });
