@@ -5,7 +5,8 @@ import { loadArea, saveArea } from "./store";
 /** The same servers and the same query as `scripts/fetch_area.py`. */
 export const OVERPASS_URLS = [
   "https://overpass-api.de/api/interpreter",
-  "https://overpass.openstreetmap.fr/api/interpreter",
+  "https://overpass.private.coffee/api/interpreter",
+  "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
 ];
 const AREA_OFFSET = 3600000000; // Overpass area id = relation id + this offset
 
